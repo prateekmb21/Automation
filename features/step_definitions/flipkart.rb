@@ -1,23 +1,29 @@
 require 'selenium-webdriver'
-require 'test-unit'
+require 'test/unit'
 
+driver, wait = nil
+
+Before do
   caps = {
-  	'bstack:options' => {
-  		"os" => "Windows",
-  		"osVersion" => "10",
-  		"local" => "false",
-  		"consoleLogs" => "info",
-  		"networkLogs" => "true",
-  		"seleniumVersion" => "3.5.2",
-  	},
-  	"browserName" => "IE",
-  	"browserVersion" => "11.0",
+    'bstack:options' => {
+      "os" => "Windows",
+      "osVersion" => "10",
+      "local" => "false",
+      "consoleLogs" => "info",
+      "networkLogs" => "true",
+      "seleniumVersion" => "3.5.2",
+    },
+    "browserName" => "IE",
+    "browserVersion" => "11.0",
   }
 
   driver = Selenium::WebDriver.for(:remote,
     :url => "http://" + ENV['USERNAME'] + ":" + ENV['PASSWORD'] + "@hub-cloud.browserstack.com/wd/hub",
     :desired_capabilities => caps)
   wait = Selenium::WebDriver::Wait.new(:timeout => 15)
+  puts "DRIVER MUST HAVE INITIALIZED BY NOW"
+end
+
 
 Given(/^I am on "([^"]*)" homepage$/) do |website|
   driver.navigate.to "http://www.#{website}"
@@ -37,5 +43,8 @@ Then(/^I should see relevant search results$/) do
   	puts e.text
   end
   assert_equal elements.size,10
+end
+
+After do
   driver.quit
 end
