@@ -1,4 +1,5 @@
 require 'selenium-webdriver'
+require 'test-unit'
 
   caps = {
   	'bstack:options' => {
@@ -16,7 +17,7 @@ require 'selenium-webdriver'
 
 
   driver = Selenium::WebDriver.for(:remote,
-    :url => "http://prateekbhiwapurk2:5yDG4MWRdXoFx8Fzg2Mi@hub-cloud.browserstack.com/wd/hub",
+    :url => "http://" + ENV['USERNAME'] + ":" + ENV['PASSWORD'] + "@hub-cloud.browserstack.com/wd/hub",
     :desired_capabilities => caps)
   wait = Selenium::WebDriver::Wait.new(:timeout => 15)
 
@@ -34,11 +35,12 @@ When(/^I search for "([^"]*)" in search bar and hit enter$/) do |product|
 end
 
 Then(/^I should see relevant search results$/) do
-  elements = driver.find_elements(:xpath, resultXpath)
+  elements = driver.find_elements(:class, "_3wU53n")
   puts "Elements array size: #{elements.size}"
   elements.each do |e|
   	puts "Printing element text"
   	puts e.text
   end
+  assert_equal elements.size,10
   driver.quit
 end
