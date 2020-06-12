@@ -15,5 +15,5 @@ Then(/^I should see relevant search results$/) do
   elements.each do |e|
   	puts e.text
   end
-  assert_equal elements.size,10
+  assert_equal 24,elements.size
 end
